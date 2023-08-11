@@ -3,7 +3,7 @@ const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
   entry: {
-    main: "./Main.js",
+    main: "./DIST/Main.js",
   },
   output: {
     path: path.join(__dirname, "dist", "PROD"),
@@ -14,7 +14,7 @@ module.exports = {
   mode: "production",
   target: "node",
   externals: [nodeExternals()],
-  modulke: {
+  module: {
     rules: [
       {
         test: /\.js$/,
