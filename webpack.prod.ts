@@ -1,7 +1,8 @@
-const path = require("path");
-const nodeExternals = require("webpack-node-externals");
+import path from "path";
+// import {} from "webpack";
+import nodeExternals from "webpack-node-externals";
 
-module.exports = {
+const Config = {
   entry: {
     main: "./DIST/Main.js",
   },
@@ -24,3 +25,5 @@ module.exports = {
     ],
   },
 };
+
+export default Config;

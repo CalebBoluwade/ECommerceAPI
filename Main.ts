@@ -35,8 +35,6 @@ API.set("env", process.env.NODE_ENV);
 API.set("trust proxy", 1);
 API.use(express.urlencoded({ extended: true, limit: "50kb" }));
 API.use(express.json({ limit: "50kb" }));
-API.use(NotFoundRouteHandler);
-API.use(ErrorHandler);
 API.use(
   compression({
     level: 8,
