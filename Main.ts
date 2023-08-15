@@ -6,11 +6,11 @@ import compression from "compression";
 import responseTime from "response-time";
 import { NotFoundRouteHandler } from "./MIDDLEWARES/NOT_FOUND.MIDDLEWARE";
 import { ErrorHandler } from "./MIDDLEWARES/ERRORHANDLER.MIDDLEWARE";
+import cors from "cors";
 import SwaggerUI from "swagger-ui-express";
-import SwaggerJSON from "./HELPERS/SWAGGER.HELPER.json";
+import { SwaggerJSON, openApiInstance } from "./HELPERS/SWAGGER.HELPER";
 const API = express();
-API.set("env", process.env.NODE_ENV);
-
+// API.set("env", process.env.NODE_ENV);OpenApi
 // const rateLimiter = rateLimit({
 //     windowMs: 10 * 60 * 5000,
 //     max: 35,
@@ -33,6 +33,7 @@ API.set("env", process.env.NODE_ENV);
 
 //   API.use(rateLimiter);
 API.set("trust proxy", 1);
+API.use(cors());
 API.use(express.urlencoded({ extended: true, limit: "50kb" }));
 API.use(express.json({ limit: "50kb" }));
 API.use(
@@ -43,20 +44,8 @@ API.use(
 );
 API.use(responseTime({}));
 //   API.use(DatabaseMiddleware);
-
 API.use(helmet());
-API.use(
-  helmet.contentSecurityPolicy({
-    // the following directives will be merged into the default helmet CSP policy
-    directives: {
-      defaultSrc: ["'self'"], // default value for all directives that are absent
-      scriptSrc: ["'self'"], // helps prevent XSS attacks
-      frameAncestors: ["'none'"], // helps prevent Clickjacking attacks
-      imgSrc: ["'self'", "'http://imgexample.com'"],
-      styleSrc: ["'none'"],
-    },
-  })
-);
+API.use(helmet.contentSecurityPolicy());
 API.use(helmet.crossOriginEmbedderPolicy());
 API.use(helmet.crossOriginOpenerPolicy());
 API.use(helmet.crossOriginResourcePolicy());
@@ -78,10 +67,17 @@ API.use(helmet.referrerPolicy());
 API.use(helmet.xssFilter());
 
 API.use(ErrorHandler);
-API.use(NotFoundRouteHandler);
 
-API.get("/", (req, res) => {res.json({})})
+API.get("/", (req, res) => {
+  res.json({});
+});
+API.use(
+  "/swagger",
+  SwaggerUI.serve,
+  SwaggerUI.setup(openApiInstance.generateJson())
+);
 API.listen(process.env.PORT, () => {
-  API.use("/swagger", SwaggerUI.serve, SwaggerUI.setup(SwaggerJSON));
   console.log("Yowa");
 });
+
+API.use(NotFoundRouteHandler);
