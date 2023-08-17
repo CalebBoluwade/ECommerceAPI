@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "E Commerce API",
   "main": "Main.ts",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "test": "jest --watchAll --detectOpenHandles",
     "dev": "nodemon Main.ts",

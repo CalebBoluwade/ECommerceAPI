@@ -1,5 +1,5 @@
 export interface ResponseSchema {
-  statusCode: number;
+  // statusCode: number;
   status: string;
   results: number;
   data: string | any[] | null;

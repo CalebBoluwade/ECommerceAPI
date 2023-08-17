@@ -1,3 +1,7 @@
+/**
+@author Boluwade Caleb <@CalebBoluwade>
+*/
+
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -9,6 +13,8 @@ import { ErrorHandler } from "./MIDDLEWARES/ERRORHANDLER.MIDDLEWARE";
 import cors from "cors";
 import SwaggerUI from "swagger-ui-express";
 import { SwaggerJSON, openApiInstance } from "./HELPERS/SWAGGER.HELPER";
+import { UTILS } from "./UTILS/INDEX.UTILS";
+import { dev_config } from "./CONFIG/DEV.CONFIG";
 const API = express();
 // API.set("env", process.env.NODE_ENV);OpenApi
 // const rateLimiter = rateLimit({
@@ -33,7 +39,10 @@ const API = express();
 
 //   API.use(rateLimiter);
 API.set("trust proxy", 1);
-API.use(cors());
+API.use(cors({
+  origin: [`http://localhost:${dev_config.PORT}`],
+  credentials: true
+}));
 API.use(express.urlencoded({ extended: true, limit: "50kb" }));
 API.use(express.json({ limit: "50kb" }));
 API.use(
@@ -68,8 +77,15 @@ API.use(helmet.xssFilter());
 
 API.use(ErrorHandler);
 
+const C = new Map<string, {
+  l: boolean
+  a: string
+}>();
+
+// C[UTILS.GetUUID()] = {l: false, a: ",jl"}
+C.set(UTILS.GetUUID(), {l: false, a: ",jl"})
 API.get("/", (req, res) => {
-  res.json({});
+  res.send("E Commerce API SAYS Hello World")
 });
 API.use(
   "/swagger",
