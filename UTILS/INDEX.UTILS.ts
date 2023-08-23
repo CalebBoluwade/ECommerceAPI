@@ -83,8 +83,10 @@ const GenerateOrderRef = (): string => {
   return orderReference;
 };
 
+const Logger = pino()
+
 export const UTILS = {
-  Logger: () => {},
+  Logger,
   GetUUID: uuidv4,
   ValidateUUID: validate,
   signAccessJWT,

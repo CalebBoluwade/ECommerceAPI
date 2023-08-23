@@ -4,6 +4,7 @@ import ip from "ip";
 import { UTILS } from "../UTILS/INDEX.UTILS";
 import { JwtPayload } from "jsonwebtoken";
 import APIRESPONSE from "../HELPERS/APIRESPONSE.HELPER";
+import { ResponseMapping } from "../UTILS/RESPONSE_MAPPING.UTILS";
 
 interface JWTResponse {
   valid: boolean;
@@ -44,11 +45,10 @@ const ValidateAPIUser =
       );
 
       if (!user.valid) {
-        return APIRESPONSE(Response, {
+        return APIRESPONSE(Response, 401, {
           data: null,
           results: 0,
           status: accessToken ? "Expired / Invalid Token" : "No Token Provided",
-          statusCode: 401,
         });
       }
 
@@ -73,11 +73,10 @@ const ValidateAPIUser =
       }
     } catch (error: any) {
       UTILS.Logger.error([error], error.message);
-      return APIRESPONSE(Response, {
+      return APIRESPONSE(Response, ResponseMapping.INVALID_REQUEST.SERVER, {
         data: null,
         results: 0,
         status: "Unable To Verify",
-        statusCode: 400,
       });
     }
 

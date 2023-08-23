@@ -15,8 +15,10 @@ import SwaggerUI from "swagger-ui-express";
 import { SwaggerJSON, openApiInstance } from "./HELPERS/SWAGGER.HELPER";
 import { UTILS } from "./UTILS/INDEX.UTILS";
 import { dev_config } from "./CONFIG/DEV.CONFIG";
+// import rateLimit from "express-rate-limit";
+
 const API = express();
-// API.set("env", process.env.NODE_ENV);OpenApi
+API.set("env", process.env.NODE_ENV);
 // const rateLimiter = rateLimit({
 //     windowMs: 10 * 60 * 5000,
 //     max: 35,

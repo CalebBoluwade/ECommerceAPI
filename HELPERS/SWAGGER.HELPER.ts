@@ -5,6 +5,7 @@ import {
   basicAuth,
   bearerAuth,
 } from "ts-openapi";
+import { AuthSwaggerDocs } from "../SRC/AUTH/AUTH.SWAGGER";
 
 export const SwaggerJSON: OpenApiSchema = {
   // definition: {
@@ -31,7 +32,7 @@ export const SwaggerJSON: OpenApiSchema = {
 
 export const openApiInstance: OpenApi = new OpenApi(
   "3.0.3",
-  "ECOMM",
+  "E-COMMERCE API DOCS",
   "REST APIs",
   "calebb.jnr@gmail.com"
 );
@@ -49,48 +50,9 @@ openApiInstance.declareSecurityScheme("JWT", {
 
 // openApiInstance.declareSecurityScheme()
 
-openApiInstance.addPath(
-  "/",
-  {
-    get: {
-      description: "",
-      summary: "User Authentication API", // Method summary
-      operationId: "login",
-      responses: {
-        // here we declare the response types
-        200: {
-          description: "",
-          schema: {
-            type: "object",
-            description: "",
-            properties: {},
-          },
-          content: {
-            ResponseSchema: {
-              schema: {
-                type: "object",
-                description: "",
-                properties: {},
-              },
-            },
-          },
-        },
-        500: textPlain("Internal Server Error"),
-      },
-      tags: ["Auth"],
-      // "consumes": [
-      //   "application/json"
-      //   ],
-      // "produces": [
-      // "application/json"
-      // ],
-      security: [],
-    },
-  },
-  true
-);
+AuthSwaggerDocs(openApiInstance)
 
-// openApiInstance.declareSchema("", )
+// openApiInstance.declareSchema("", A)
 
 // set API license
 openApiInstance.setLicense(
