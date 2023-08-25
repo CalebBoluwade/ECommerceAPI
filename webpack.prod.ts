@@ -7,7 +7,7 @@ const Config = {
     main: "./DIST/Main.js",
   },
   output: {
-    path: path.join(__dirname, "dist", "PROD"),
+    path: path.join(__dirname, "DIST", "PROD"),
     publicPath: "/",
     filename: "[name].js",
     clean: true,

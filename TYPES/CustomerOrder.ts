@@ -5,4 +5,6 @@ const orderStatus = {
   d: "delivered",
 } as const;
 
-type Order = (typeof orderStatus)[keyof typeof orderStatus];
+export type OrderStatusEnum = (typeof orderStatus)[keyof typeof orderStatus];
+
+// export const OrdStatusEnum =  new Array(orderStatus);

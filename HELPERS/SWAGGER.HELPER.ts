@@ -6,6 +6,7 @@ import {
   bearerAuth,
 } from "ts-openapi";
 import { AuthSwaggerDocs } from "../SRC/AUTH/AUTH.SWAGGER";
+import { OrderSwaggerDocs } from "../SRC/ORDERS/ORDER.SWAGGER";
 
 export const SwaggerJSON: OpenApiSchema = {
   // definition: {
@@ -51,7 +52,7 @@ openApiInstance.declareSecurityScheme("JWT", {
 // openApiInstance.declareSecurityScheme()
 
 AuthSwaggerDocs(openApiInstance)
-
+OrderSwaggerDocs(openApiInstance)
 // openApiInstance.declareSchema("", A)
 
 // set API license
