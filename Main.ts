@@ -41,10 +41,12 @@ API.set("env", process.env.NODE_ENV);
 
 //   API.use(rateLimiter);
 API.set("trust proxy", 1);
-API.use(cors({
-  origin: [`http://localhost:${dev_config.PORT}`],
-  credentials: true
-}));
+API.use(
+  cors({
+    origin: [`http://localhost:${dev_config.PORT}`],
+    credentials: true,
+  })
+);
 API.use(express.urlencoded({ extended: true, limit: "50kb" }));
 API.use(express.json({ limit: "50kb" }));
 API.use(
@@ -79,23 +81,42 @@ API.use(helmet.xssFilter());
 
 API.use(ErrorHandler);
 
-const C = new Map<string, {
-  l: boolean
-  a: string
-}>();
+const C = new Map<
+  string,
+  {
+    l: boolean;
+    a: string;
+  }
+>();
 
 // C[UTILS.GetUUID()] = {l: false, a: ",jl"}
-C.set(UTILS.GetUUID(), {l: false, a: ",jl"})
+C.set(UTILS.GetUUID(), { l: false, a: ",jl" });
 API.get("/", (req, res) => {
-  res.send("E Commerce API SAYS Hello World")
+  res.send("E Commerce API SAYS Hello World");
 });
 API.use(
   "/swagger",
   SwaggerUI.serve,
   SwaggerUI.setup(openApiInstance.generateJson())
 );
-API.listen(process.env.PORT, () => {
-  console.log("Yowa");
+const ServerAPI = API.listen(process.env.PORT, () => {
+  console.log(`Yowa!! | Running | ${process.env.PORT}`);
+});
+
+// Handling uncaught Exception
+process.on("uncaughtException", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log(`shutting down the server for handling uncaught exception`);
+});
+
+// unhandled promise rejection
+process.on("unhandledRejection", (err: Error) => {
+  console.log(`Shutting down the server for ${err.message}`);
+  console.log(`shutting down the server for unhandle promise rejection`);
+
+  ServerAPI.close(() => {
+    process.exitCode = 1;
+  });
 });
 
 API.use(NotFoundRouteHandler);

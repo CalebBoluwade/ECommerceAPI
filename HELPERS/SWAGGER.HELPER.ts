@@ -4,9 +4,14 @@ import {
   textPlain,
   basicAuth,
   bearerAuth,
+  Joi
 } from "ts-openapi";
 import { AuthSwaggerDocs } from "../SRC/AUTH/AUTH.SWAGGER";
+import { ValidateAuthRequest } from "../SRC/AUTH/AUTH.SCHEMA";
 import { OrderSwaggerDocs } from "../SRC/ORDERS/ORDER.SWAGGER";
+import { ZodSchema } from "zod";
+import { ProductsSwaggerDocs } from "../SRC/PRODUCTS/PRODUCT.SWAGGER";
+import { CouponSwaggerDocs } from "../SRC/COUPON/COUPON.SWAGGER";
 
 export const SwaggerJSON: OpenApiSchema = {
   // definition: {
@@ -53,7 +58,9 @@ openApiInstance.declareSecurityScheme("JWT", {
 
 AuthSwaggerDocs(openApiInstance)
 OrderSwaggerDocs(openApiInstance)
-// openApiInstance.declareSchema("", A)
+ProductsSwaggerDocs(openApiInstance)
+CouponSwaggerDocs(openApiInstance)
+// openApiInstance.declareSchema()
 
 // set API license
 openApiInstance.setLicense(

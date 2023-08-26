@@ -1,13 +1,23 @@
-import { OpenApi, textPlain } from "ts-openapi";
+import { OpenApi, Types, textPlain } from "ts-openapi";
 
-export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
+export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
   openApiInstance.addPath(
-    "/Auth/user",
+    "/Coupon/:vendorId/activate",
     {
       post: {
         description: "",
-        summary: "User Authentication API", // Method summary
-        operationId: "login",
+        summary: "Vendor Coupon Creation API", // Method summary
+        operationId: "CouponCreate",
+        requestSchema: {
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            vendorId: Types.String({
+              required: true,
+            }),
+          },
+        },
         responses: {
           // here we declare the response types
           200: {
@@ -42,7 +52,7 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
           401: textPlain("User not Found"),
           500: textPlain("Internal Server Error"),
         },
-        tags: ["Auth"],
+        tags: ["Coupons"],
         // "consumes": [
         //   "application/json"
         //   ],
@@ -56,16 +66,26 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
   );
 
   openApiInstance.addPath(
-    "/Auth/Register",
+    "/Coupon/:vendorId/deactivate",
     {
-      post: {
+      put: {
         description: "",
-        summary: "User Authentication API", // Method summary
-        operationId: "Register",
+        summary: "Vendor Coupon DEACTIVATE API", // Method summary
+        operationId: "CouponL",
+        requestSchema: {
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            vendorId: Types.String({
+              required: true,
+            }),
+          },
+        },
         responses: {
           // here we declare the response types
-          201: {
-            description: "Response Object",
+          200: {
+            description: "",
             schema: {
               type: "object",
               description: "",
@@ -82,11 +102,6 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
                   properties: {},
                 },
               },
-              example: {
-                status: "Created",
-                results: 1,
-                data: []
-              }
             },
             content: {
               ResponseSchema: {
@@ -101,7 +116,7 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
           401: textPlain("User not Found"),
           500: textPlain("Internal Server Error"),
         },
-        tags: ["Auth"],
+        tags: ["Coupons"],
         // "consumes": [
         //   "application/json"
         //   ],
@@ -115,16 +130,27 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
   );
 
   openApiInstance.addPath(
-    "/Auth/Forgot",
+    "/Coupon/validate/:coupon",
     {
-      patch: {
-        description: "",
-        summary: "User Authentication API", // Method summary
-        operationId: "ForgotPassword",
+      get: {
+        description: "Customer Coupon",
+        summary: "Validate Customer Coupon", // Method summary
+        operationId: "validateCoupon",
+        requestSchema: {
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            coupon: Types.String({
+              required: true,
+              description: "Customer's ID",
+            }),
+          },
+        },
         responses: {
           // here we declare the response types
-          201: {
-            description: "Response Object",
+          200: {
+            description: "",
             schema: {
               type: "object",
               description: "",
@@ -141,11 +167,6 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
                   properties: {},
                 },
               },
-              example: {
-                status: "Created",
-                results: 1,
-                data: []
-              }
             },
             content: {
               ResponseSchema: {
@@ -160,66 +181,7 @@ export const AuthSwaggerDocs = (openApiInstance: OpenApi) => {
           401: textPlain("User not Found"),
           500: textPlain("Internal Server Error"),
         },
-        tags: ["Auth"],
-        // "consumes": [
-        //   "application/json"
-        //   ],
-        // "produces": [
-        // "application/json"
-        // ],
-        security: [],
-      },
-    },
-    true
-  );
-
-  openApiInstance.addPath(
-    "/Auth/DeleteAccount",
-    {
-      delete: {
-        description: "",
-        summary: "User Authentication API", // Method summary
-        operationId: "DeleteAccount",
-        responses: {
-          // here we declare the response types
-          201: {
-            description: "Response Object",
-            schema: {
-              type: "object",
-              description: "",
-              properties: {
-                status: {
-                  type: "string",
-                },
-                results: {
-                  type: "number",
-                },
-                data: {
-                  type: "object",
-                  description: "",
-                  properties: {},
-                },
-              },
-              example: {
-                status: "Created",
-                results: 1,
-                data: []
-              }
-            },
-            content: {
-              ResponseSchema: {
-                schema: {
-                  type: "object",
-                  description: "",
-                  properties: {},
-                },
-              },
-            },
-          },
-          401: textPlain("User not Found"),
-          500: textPlain("Internal Server Error"),
-        },
-        tags: ["Auth"],
+        tags: ["Coupons"],
         // "consumes": [
         //   "application/json"
         //   ],

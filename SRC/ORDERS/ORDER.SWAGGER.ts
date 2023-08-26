@@ -2,21 +2,21 @@ import { OpenApi, Types, textPlain } from "ts-openapi";
 
 export const OrderSwaggerDocs = (openApiInstance: OpenApi) => {
   openApiInstance.addPath(
-    "/Order/create/:userId",
+    "/Order/:userId/create",
     {
       post: {
         description: "",
         summary: "Place Store Order API", // Method summary
         operationId: "placeOrder",
         requestSchema: {
-            headers: {
-                // Authorization: "string"
-            },
-            params: {
-                userId: Types.String({
-                    required: true
-                })
-            }
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            userId: Types.String({
+              required: true,
+            }),
+          },
         },
         responses: {
           // here we declare the response types
@@ -66,21 +66,29 @@ export const OrderSwaggerDocs = (openApiInstance: OpenApi) => {
   );
 
   openApiInstance.addPath(
-    "/Order/customer/:userId",
+    "/Order/customer/:userId?limit=limit",
     {
-      post: {
+      get: {
         description: "",
         summary: "List Customer's Orders API", // Method summary
         operationId: "customerOrders",
         requestSchema: {
-            headers: {
-                // Authorization: "string"
-            },
-            params: {
-                userId: Types.String({
-                    required: true
-                })
-            }
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            userId: Types.String({
+              required: true,
+              description: "Customer's ID"
+            }),
+          },
+          query: {
+            limit: Types.Number({
+              required: true,
+              description: "The Number of Order items returned",
+              default: 15
+            }),
+          },
         },
         responses: {
           // here we declare the response types
@@ -130,21 +138,29 @@ export const OrderSwaggerDocs = (openApiInstance: OpenApi) => {
   );
 
   openApiInstance.addPath(
-    "/Order/vendor/:vendorId",
+    "/Order/vendor/:vendorId?limit=limit",
     {
-      post: {
+      get: {
         description: "",
         summary: "List Vendor's Orders API", // Method summary
         operationId: "vendorOrders",
         requestSchema: {
-            headers: {
-                // Authorization: "string"
-            },
-            params: {
-                userId: Types.String({
-                    required: true
-                })
-            }
+          headers: {
+            // Authorization: "string"
+          },
+          params: {
+            vendorId: Types.String({
+              required: true,
+              description: "Vendor's ID"
+            }),
+          },
+          query: {
+            limit: Types.Number({
+              required: true,
+              description: "The Number of Order items returned",
+              default: 15
+            }),
+          },
         },
         responses: {
           // here we declare the response types
@@ -152,7 +168,7 @@ export const OrderSwaggerDocs = (openApiInstance: OpenApi) => {
             description: "",
             schema: {
               type: "object",
-              description: "",
+              description: "Response",
               properties: {
                 status: {
                   type: "string",
