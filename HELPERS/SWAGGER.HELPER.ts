@@ -4,7 +4,9 @@ import {
   textPlain,
   basicAuth,
   bearerAuth,
-  Joi
+  Joi,
+  Types,
+  apiKeyAuth,
 } from "ts-openapi";
 import { AuthSwaggerDocs } from "../SRC/AUTH/AUTH.SWAGGER";
 import { ValidateAuthRequest } from "../SRC/AUTH/AUTH.SCHEMA";
@@ -44,23 +46,47 @@ export const openApiInstance: OpenApi = new OpenApi(
 );
 
 openApiInstance.setServers([
-  { url: "http://prod-api.com:443/api/v1" },
-  { url: `http://localhost:${process.env.PORT}` },
+  { url: "http://prod.api.com:443/api/v1" },
+  { url: `http://localhost:${process.env.PORT}/api/v1` },
 ]);
 
-openApiInstance.declareSecurityScheme("JWT", {
-  in: "header",
-  name: "Authorization",
-  type: "apiKey",
-});
+// openApiInstance.declareSecurityScheme("JWT", {
+//   in: "header",
+//   name: "Authorization",
+//   type: "apiKey",
+// });
+openApiInstance.declareSecurityScheme("bearerSecurity", bearerAuth());
+// declare global schemes (applicable to all methods)
+openApiInstance.addGlobalSecurityScheme("bearerSecurity");
+
+// to receive a key name X-API-KEY (or other name) in header, cookie or query parameter
+// openApiInstance.declareSecurityScheme(
+//   "apiSecurity",
+//   apiKeyAuth("X-API-KEY", "header")
+// );
 
 // openApiInstance.declareSecurityScheme()
 
-AuthSwaggerDocs(openApiInstance)
-OrderSwaggerDocs(openApiInstance)
-ProductsSwaggerDocs(openApiInstance)
-CouponSwaggerDocs(openApiInstance)
-// openApiInstance.declareSchema()
+AuthSwaggerDocs(openApiInstance);
+OrderSwaggerDocs(openApiInstance);
+ProductsSwaggerDocs(openApiInstance);
+CouponSwaggerDocs(openApiInstance);
+
+export const APIResponse = Types.Object({
+  properties: {
+    message: Types.String({
+      description: "Response message",
+    }),
+    code: Types.Integer({
+      description: "number",
+    }),
+    // data: Types.Array({
+    //   description: "",
+    //   arrayType: "",
+    // }),
+  },
+  example: { message: "Successful", code: 200 },
+});
 
 // set API license
 openApiInstance.setLicense(

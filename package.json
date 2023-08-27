@@ -14,7 +14,7 @@
     "prod": "tsc -p . && "
   },
   "keywords": [],
-  "author": "",
+  "author": "Boluwade Caleb <@Calebb.jnr@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^29.5.3",

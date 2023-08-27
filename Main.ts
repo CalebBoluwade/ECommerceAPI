@@ -97,7 +97,7 @@ API.get("/", (req, res) => {
 API.use(
   "/swagger",
   SwaggerUI.serve,
-  SwaggerUI.setup(openApiInstance.generateJson())
+  SwaggerUI.setup(openApiInstance.generateJson(), {explorer: true, swaggerOptions: {}, })
 );
 const ServerAPI = API.listen(process.env.PORT, () => {
   console.log(`Yowa!! | Running | ${process.env.PORT}`);

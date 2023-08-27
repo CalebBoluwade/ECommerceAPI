@@ -1,4 +1,31 @@
 import { OpenApi, Types, textPlain } from "ts-openapi";
+// import { APIResponse } from "../../HELPERS/SWAGGER.HELPER";
+
+const errorSchema = Types.Object({
+    description: "Error description",
+    properties: {
+        message: Types.String({ description: "Error message" }),
+        code: Types.Integer({ description: "Error code" }),
+    },
+    example: { message: "Bad request", code: 400 }
+});
+
+export const APIResponse =  Types.Object({ 
+    modelName: "API Response Schema",    
+    properties: {
+      message: Types.String({
+        description: "Response message",
+      }),
+      results: Types.Integer({
+        description: "number",
+      }),
+      data: Types.String({
+        description: "",
+        // arrayType: "string",
+      }),
+    },
+    example: { message: "Successful", results: 200, data: "" },
+  })
 
 export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
   openApiInstance.addPath(
@@ -20,35 +47,8 @@ export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
         },
         responses: {
           // here we declare the response types
-          200: {
-            description: "",
-            schema: {
-              type: "object",
-              description: "",
-              properties: {
-                status: {
-                  type: "string",
-                },
-                results: {
-                  type: "number",
-                },
-                data: {
-                  type: "object",
-                  description: "",
-                  properties: {},
-                },
-              },
-            },
-            content: {
-              ResponseSchema: {
-                schema: {
-                  type: "object",
-                  description: "",
-                  properties: {},
-                },
-              },
-            },
-          },
+          200: openApiInstance.declareSchema("s", APIResponse),
+          400: openApiInstance.declareSchema("Bad Request", errorSchema),
           401: textPlain("User not Found"),
           500: textPlain("Internal Server Error"),
         },
@@ -59,7 +59,7 @@ export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
         // "produces": [
         // "application/json"
         // ],
-        security: [],
+        security: [{bearerSecurity: []}],
       },
     },
     true
@@ -81,6 +81,7 @@ export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
               required: true,
             }),
           },
+        
         },
         responses: {
           // here we declare the response types
@@ -113,6 +114,14 @@ export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
               },
             },
           },
+          400: {
+            description: "Bad operation.",
+            content: { "text-plain": {
+            //     schema: {
+            //     // status: Types.String({})
+            // }
+        } },  // mimetype with empty schema
+        },
           401: textPlain("User not Found"),
           500: textPlain("Internal Server Error"),
         },
@@ -123,7 +132,7 @@ export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {
         // "produces": [
         // "application/json"
         // ],
-        security: [],
+        security: [{bearerSecurity: []}],
       },
     },
     true
