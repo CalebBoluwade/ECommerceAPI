@@ -4,7 +4,7 @@
 
 import dotenv from "dotenv";
 dotenv.config();
-import express from "express";
+import express, { Application, urlencoded, json } from "express";
 import helmet from "helmet";
 import compression from "compression";
 import responseTime from "response-time";
@@ -14,11 +14,18 @@ import cors from "cors";
 import SwaggerUI from "swagger-ui-express";
 import { SwaggerJSON, openApiInstance } from "./HELPERS/SWAGGER.HELPER";
 import { UTILS } from "./UTILS/INDEX.UTILS";
-import { dev_config } from "./CONFIG/DEV.CONFIG";
+import { Env } from "./CONFIG/DEV.CONFIG";
+import { Product } from "./SRC/PRODUCTS/PRODUCT.SERVICE";
 // import rateLimit from "express-rate-limit";
 
-const API = express();
+const API: Application = express();
 API.set("env", process.env.NODE_ENV);
+API.use(
+  urlencoded({
+    extended: true,
+  })
+);
+API.use(json());
 // const rateLimiter = rateLimit({
 //     windowMs: 10 * 60 * 5000,
 //     max: 35,
@@ -43,10 +50,11 @@ API.set("env", process.env.NODE_ENV);
 API.set("trust proxy", 1);
 API.use(
   cors({
-    origin: [`http://localhost:${dev_config.PORT}`],
+    origin: [`http://localhost:${Env("PORT")}`],
     credentials: true,
   })
 );
+// console.log("h",Env('PORT'))
 API.use(express.urlencoded({ extended: true, limit: "50kb" }));
 API.use(express.json({ limit: "50kb" }));
 API.use(
@@ -90,17 +98,20 @@ const C = new Map<
 >();
 
 // C[UTILS.GetUUID()] = {l: false, a: ",jl"}
-C.set(UTILS.GetUUID(), { l: false, a: ",jl" });
+// C.set(UTILS.GetUUID(), { l: false, a: ",jl" });
 API.get("/", (req, res) => {
   res.send("E Commerce API SAYS Hello World");
 });
 API.use(
   "/swagger",
   SwaggerUI.serve,
-  SwaggerUI.setup(openApiInstance.generateJson(), {explorer: true, swaggerOptions: {}, })
+  SwaggerUI.setup(openApiInstance.generateJson(), {})
 );
-const ServerAPI = API.listen(process.env.PORT, () => {
-  console.log(`Yowa!! | Running | ${process.env.PORT}`);
+
+const Prod = new Product("Shoes");
+const ServerAPI = API.listen(process.env.PORT, async () => {
+  console.log(`Yowa!! | Running | ${Env("PORT")}`);
+  console.log(await Prod.GetProductByID());
 });
 
 // Handling uncaught Exception

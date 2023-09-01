@@ -19,12 +19,12 @@ export const APIResponse =  Types.Object({
       results: Types.Integer({
         description: "number",
       }),
-      data: Types.String({
+      data: Types.Array({
         description: "",
-        // arrayType: "string",
+        arrayType: Types.String({})
       }),
     },
-    example: { message: "Successful", results: 200, data: "" },
+    example: { message: "Successful", results: 200, data: [] },
   })
 
 export const CouponSwaggerDocs = (openApiInstance: OpenApi) => {

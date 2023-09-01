@@ -7,6 +7,7 @@ export const ErrorHandler: ErrorRequestHandler = async (
   Next
 ) => {
   try {
+    console.log(error.fields);
     // mail = errorMailer.sendMail({
     //     from: 'contact@neverforgetit.net',
     //     to: 'kuczak.tomasz@gmail.com',
